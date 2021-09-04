@@ -1,114 +1,41 @@
---Insert into author
-use BookShop;
-insert into Author(
-  name,
-  address,
-  url)
-  values(
-  'karan Motwani',
-  'Gujarat',
-  'https://karanmotwani'
-  ),
-  (
-  'Priyatosh Dixit',
-  'Maharashtra',
-  'https://PriyatoshDixit'
-  ),
-  (
-  'Hamza Usmani',
-  'UP',
-  'https://Hamzausmani'
-  );
+create view Book_Data as select * from Book;
 
- Insert into Publisher(
-   name,
-   address,
-   phone,
-   url)
-   values(
-   'Siddarth Menon',
-   'kerala',
-   '8275913637',
-   'https://siddarthmenon'
-   ),
-   (
-   'Gauri Tawde',
-   'Himachal',
-   '8668822108',
-   'https://gauritawde'
-   ),
-   (
-   'Monika Jambhale',
-   'MP',
-   '8275854512',
-   'https://monikajambhale'
-   );
-Insert into Book(
-ISBN,
-name,
-publisher_name,
-AuthorName,
-AuthorAdress,
-year,
-Title,
-Price
-)
-values(
-'25634',
-'Subtle art',
-'Siddarth Menon',
-'karan Motwani',
-'Gujarat',
-2017,
-'life',
-300.50),('25635',
-'norweign wood',
-'Gauri Tawde',
-'Priyatosh Dixit',
-'Maharashtra',
-2018,
-'story',
-400.50),('25636',
-'Sleeping widow',
-'Monika Jambhale',
-'Hamza Usmani',
-'UP',
-2019,
-'History',
-500.50
-);
+select * from Book;
+select * from Author;
+drop view Book_Data
 
- insert into Customer(
-	email,
-	Name,
-	Phone,
-	Address
- )
-  values(
-  'ppdhatrak@gmail.com',
-  'Prajakta',
-  8208049845,
-  'Nashikroad'
-  ),
-  (
-  'suchitkoli97@gmail.com',
-  'Suchit',
-  8668822108,
-  'DGP nagar'
-  ),
-  (
-  'jhadevesh34@gmail.com',
-  'Devesh',
-  7620647952,
-  'Satpur'
-  );
+---create view Book_info as select b.name,a.name  from Book b inner join Author a on b.AuthorName =a.name;
+create view Author_Data as select * from Author;
+select b.name,a.name  from Book_Data b inner join Author_Data a on b.AuthorName =a.name;
 
-  insert into ShoppingBasket(
-  CustomerEmail)
-  values('ppdhatrak@gmail.com'),('suchitkoli97@gmail.com'),('jhadevesh34@gmail.com');
+Create view ViewAllDetails  
+as  
+Select b.ISBN, b.name  ,a.url
+from Book b 
+join Author a
+on b.AuthorName = a.name 
 
+select * from ViewAllDetails;
+
+/*Create trigger TR_ViewBookDetails_InsteadOfInsert  
+on ViewAllDetails  
+Instead Of Insert  
+as  
+Begin  
+Declare @SecId varchar(255) 
   
-
-  insert into ShoppingBasket_Book(ShoppingBasket_id,BookISBN,count
-  ) values(5,'25634',11),(6,'25635',12),(7,'25636',13);
-
+Select @SecId = AuthorName 
+from Author 
+join inserted  
+on inserted.name = Author.name  
+  
+if(@SecId is null)  
+Begin  
+Raiserror('Invalid Section Name. Statement Terminated OK', 16, 1)  
+return  
+End  
+  
+Insert into (ISBN,name,publisher_name,Authorname,AuthorAdress,year,Title,Price)  
+Select name, @SecId  
+from inserted  
+End*/
